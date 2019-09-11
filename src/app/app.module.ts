@@ -3,6 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HeaderModule } from './header/header.module';
+import { DeckBuildingModule } from './deck-building/deck-building.module';
+import { HttpClientModule } from '@angular/common/http';
+import { CardImageDirective } from './directives/card-image.directive';
 
 @NgModule({
   declarations: [
@@ -10,7 +14,10 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HeaderModule,
+    DeckBuildingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

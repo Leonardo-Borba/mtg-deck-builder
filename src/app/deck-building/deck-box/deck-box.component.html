@@ -1,0 +1,36 @@
+<!-- <div class="row">
+
+    <div class="col-md-offset-2 col-md-5 row">
+        
+        <div class="">
+                <button>save</button>
+        </div>
+    </div>
+</div> -->
+
+<mat-grid-list cols="4" rowHeight="50px">
+    <mat-grid-tile class="box-wrapper"  [colspan]="2" [rowspan]="1">
+        <div id="searchBox">
+            <cardSearchBox (selected)="addCard($event)"></cardSearchBox>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile class="box-wrapper" [colspan]="2" [rowspan]="16">
+        <div class="deck-wrapper">
+            <cdk-virtual-scroll-viewport class="deckbox" itemSize="7">
+                <card cardToolTip [card]="item.card" class="card-wrapper" *cdkVirtualFor="let item of (deck.$entries | async)" [entry]="item"
+                    (onRemove)="removeEntry($event)">
+                    </card>
+            </cdk-virtual-scroll-viewport>
+            <div>
+                <div id="control-panel">
+                    <button class="btn">save</button>
+                </div>
+            </div>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2" [rowspan]="12">
+            <mat-form-field>
+                <textarea matInput placeholder="Textarea"></textarea>
+            </mat-form-field>
+    </mat-grid-tile>
+</mat-grid-list>

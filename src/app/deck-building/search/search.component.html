@@ -1,0 +1,10 @@
+<form>
+    <mat-form-field>
+      <input matInput placeholder="Search" [matAutocomplete]="auto" [formControl]="search" (keyup)="submit($event)" >
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option *ngFor="let item of searchResult | async" [value]="item">
+          {{item}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+</form>

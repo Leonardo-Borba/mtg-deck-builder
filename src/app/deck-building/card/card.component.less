@@ -1,0 +1,107 @@
+.rectangle(@width: 300px, @height: 45px) {
+  width : @width;
+  height: @height;
+}
+
+@height: 70px;
+
+.box(@size) {
+  .rectangle(@size, @size);
+}
+
+.centered-flex {
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+}
+
+.card {
+  .rectangle(100%, @height);
+
+
+  border         : 1px solid transparent;
+  border-radius  : 4px;
+  background     : black;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+
+  transition: 1s;
+
+  &:hover {
+    border: 1px 0 1px 1px solid #00ffa3;
+
+    .background {
+      background-size: 500px !important;
+      box-shadow     : inset 0 0 15px 5px #00ffa3;
+    }
+  }
+
+  .information {
+    z-index        : 999;
+    color          : white;
+    font-size      : 1.5em;
+    font-family    : sans-serif;
+    display        : flex;
+    justify-content: space-between;
+    width          : 100%;
+    padding        : 1em;
+  }
+
+  .background {
+    .rectangle(100%, @height);
+
+    mask-image   : linear-gradient(to left, rgba(255, 0, 0, 0), rgba(255, 0, 0, 0.96), rgb(255, 0, 0));
+    border-radius: 4px;
+    filter       : brightness(0.7);
+    transition   : 1s;
+
+    background-size    : 400px;
+    background-position: center 15%;
+
+    position: absolute;
+  }
+
+  .name {
+    .centered-flex;
+  }
+
+  .properties {
+
+    height         : @height;
+    display        : flex;
+    align-items    : center;
+    justify-content: right;
+
+    .mana-symbol {
+      .box(24px);
+
+      &:not(:last-child) {
+        margin-right: 0.25em;
+      }
+    }
+
+  }
+}
+
+.controls {
+  z-index: 99;
+  .rectangle(10%, 60);
+
+
+  .mat-icon {
+    color  : white;
+    opacity: 0.75;
+  }
+
+  .quantity {
+    width: 90%;
+
+    background : transparent;
+    border     : none;
+    color      : white;
+    text-align : center;
+    font-size  : small;
+    margin-bottom: 6px;
+  }
+}
