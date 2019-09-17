@@ -7,11 +7,13 @@ export class Card {
     public manaCost: string[];
     public largeImage: string;
     public smallImage: string;
+    public normalImage:string;
     constructor(card: RawCard){
 
         this.croppedImage = this._getImage(card,"art_crop");
         this.largeImage = this._getImage(card, "large");
         this.smallImage = this._getImage(card, "small");
+        this.normalImage = this._getImage(card, "normal");
         this.name = card.name;
         this.manaCost = this._convertManaCost(this._getManaCost(card));
     }
