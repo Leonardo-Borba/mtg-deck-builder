@@ -7,6 +7,7 @@ import { stringify } from '@angular/compiler/src/util';
 import { MatDialog } from '@angular/material';
 import { LoadingSpinnerComponent } from 'src/app/shared/loading-spinner/loading-spinner.component';
 import { tap } from 'rxjs/operators';
+import { CardService } from 'src/app/services/card.service';
 
 @Component({
   selector: 'mass-import',
@@ -32,7 +33,7 @@ export class MassImportComponent implements OnInit {
   @Output("importer")
   public importer: EventEmitter<DeckEntry[]> = new EventEmitter();
 
-  constructor(private scryfall: ScryfallService, private matDialog: MatDialog) { }
+  constructor(private scryfall: ScryfallService, private matDialog: MatDialog, private cardService: CardService) { }
 
   public import(): void{
 
@@ -61,10 +62,11 @@ export class MassImportComponent implements OnInit {
     let entries: DeckEntry[] = [];
     let entriesMap: Map<string, string> = this._convertEntriesToMap(cardList);
     finalCardList.forEach(
-      cardItem => entries.push(new DeckEntry(cardItem, Number(entriesMap.get(cardItem.name))))
+      cardItem => entries.push(new DeckEntry(cardItem, this.cardService.validateQuantity(entriesMap.get(cardItem.name), cardItem)))
     )
       this.importer.emit(entries);
   }
+
   _convertEntriesToMap(cardList: { name: string; quantity: string; }[]): Map<string, string> {
     let entriesMap= new Map<string, string>()
 

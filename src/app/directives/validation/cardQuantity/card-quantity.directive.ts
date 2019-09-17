@@ -1,20 +1,25 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
-import { Card } from 'src/app/deck-building/models/Card';
+import { Directive, ElementRef, Input, OnInit, AfterViewChecked, AfterContentInit } from '@angular/core';
+import { DeckEntry } from 'src/app/deck-building/models/DeckEntry';
+import { CardService } from 'src/app/services/card.service';
 
 @Directive({
   selector: '[cardQuantity]'
 })
-export class CardQuantityDirective implements OnInit {
+export class CardQuantityDirective implements OnInit, AfterContentInit {
+  ngAfterContentInit(): void {
+    this._setMax(this.native)
+  }
   ngOnInit(): void {
-    let native = this.element.nativeElement;
-    native.min = 1
-    this._setMax(native);
+    this.native = this.element.nativeElement;
+    this.native.min = 1
   }
 
   @Input("cardQuantity")
-  public card: Card;
+  public entry: DeckEntry;
 
-  constructor(private element: ElementRef) { }
+  private native: any;
+
+  constructor(private element: ElementRef, private cardService: CardService) { }
 
   private _setMax(native: any) {
     
@@ -24,9 +29,7 @@ export class CardQuantityDirective implements OnInit {
     }
   }
   private _cardCanBeUnlimited(): boolean {
-    if(this.card.cardType.toLocaleLowerCase().includes("basic land"))
-      return true
-    return false
+    return this.cardService.canBeUnlimited(this.entry.card)
   }
 
 }
