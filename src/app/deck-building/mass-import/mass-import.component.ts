@@ -79,7 +79,7 @@ export class MassImportComponent implements OnInit {
     let cardList: {name:string; quantity: string}[] = [];
 
     try {
-      this.massImport.split("\n").forEach(
+      this.massImport.trim().split("\n").forEach(
         (item, index) => {
           let qtd = item.match(/\d+x?/);
           if(qtd != null){
