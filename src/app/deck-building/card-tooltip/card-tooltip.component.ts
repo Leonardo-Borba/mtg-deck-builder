@@ -8,12 +8,16 @@ import { Card } from '../models/Card';
 })
 export class CardTooltipComponent implements OnInit {
 
-  constructor(public card: Card, private element: ElementRef, private event: MouseEvent) { }
+  constructor(public card: Card, private element: ElementRef) { }
 
   ngOnInit() {
+
+  }
+
+  onShow(event: MouseEvent): void{
     const tooltip = this.element.nativeElement.childNodes[0];
-    tooltip.style.top = `${this.event.clientY}px`;
-    tooltip.style.left = `${this.event.clientX}px`;
+    tooltip.style.top = `${event.clientY}px`;
+    tooltip.style.left = `${event.clientX}px`;
   }
 
 }

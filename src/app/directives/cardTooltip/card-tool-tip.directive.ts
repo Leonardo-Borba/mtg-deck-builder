@@ -32,6 +32,7 @@ export class CardToolTipDirective {
     document.body.appendChild(domElem);
     
     this.dialogComponentRef = componentRef;
+    this.dialogComponentRef.instance.onShow(e)
   }
 
   @HostListener('mouseout', ['$event'])
