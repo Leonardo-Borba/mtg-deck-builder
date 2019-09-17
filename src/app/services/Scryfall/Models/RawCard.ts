@@ -4,4 +4,5 @@ export interface RawCard {
     image_uris: {[key: string]:string}
     layout: string;
     card_faces: RawCard[];
+    type_line: string;
 }

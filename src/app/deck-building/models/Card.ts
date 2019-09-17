@@ -8,6 +8,8 @@ export class Card {
     public largeImage: string;
     public smallImage: string;
     public normalImage:string;
+    public cardType:string;
+
     constructor(card: RawCard){
 
         this.croppedImage = this._getImage(card,"art_crop");
@@ -16,6 +18,7 @@ export class Card {
         this.normalImage = this._getImage(card, "normal");
         this.name = card.name;
         this.manaCost = this._convertManaCost(this._getManaCost(card));
+        this.cardType = card.type_line
     }
 
     private _convertManaCost(mana_cost: string): string[] {
