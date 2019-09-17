@@ -32,4 +32,17 @@ export class Deck {
         this.$entries.next([...this.entries.values()])
     }
 
+    public replaceAllEntries(newEntries: DeckEntry[]){
+        let newEntryMap :Map<string,DeckEntry> = new Map();
+        this.entries.clear()
+        this.alertChanges()
+        newEntries.forEach(
+            entry => {
+                this.entries.set(entry.card.name, entry)
+                this.alertChanges()
+            }
+        )
+        this.alertChanges()
+        console.log(this.entries)
+    }
 }

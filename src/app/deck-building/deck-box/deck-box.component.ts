@@ -33,4 +33,8 @@ export class DeckBoxComponent implements OnInit {
     this.deck.removeEntry(event)
   }
 
+  import(event: DeckEntry[]){
+    this.deck.replaceAllEntries(event)
+  }
+
 }

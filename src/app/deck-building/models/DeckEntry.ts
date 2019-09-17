@@ -5,8 +5,9 @@ export class DeckEntry {
     quantity: number;
     card: Card;
 
-    constructor(card: Card){
+    constructor(card: Card, quantity?:number){
         this.card = card;
-        this.quantity = 1
+        this.quantity = quantity == undefined ? 1 : quantity
     }
+
 }

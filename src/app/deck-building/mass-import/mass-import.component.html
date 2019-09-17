@@ -1,0 +1,9 @@
+<div class="mass-import-wrapper">
+        <h3>Mass Import</h3>
+        <mat-form-field class="mass-import">
+            <textarea [(ngModel)]="massImport" rows="30" matInput placeholder="Paste Here"></textarea>
+        </mat-form-field>
+        <div class="controls">
+                <button mat-raised-button color="primary" (click)="import()">Import</button>
+        </div>
+    </div>

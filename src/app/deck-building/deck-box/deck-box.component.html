@@ -7,8 +7,8 @@
     </mat-grid-tile>
     <mat-grid-tile class="box-wrapper" [colspan]="2" [rowspan]="16">
         <div class="deck-wrapper">
-            <cdk-virtual-scroll-viewport class="deckbox" itemSize="7">
-                <card cardToolTip [card]="item.card" class="card-wrapper" *cdkVirtualFor="let item of (deck.$entries | async)" [entry]="item"
+            <cdk-virtual-scroll-viewport  class="deckbox" itemSize="0">
+                <card cardToolTip [card]="item.card" class="card-wrapper" *cdkVirtualFor="let item of (deck.$entries | async);templateCacheSize: 0" [entry]="item"
                     (onRemove)="removeEntry($event)">
                     </card>
             </cdk-virtual-scroll-viewport>
@@ -19,9 +19,7 @@
             </div>
         </div>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="2" [rowspan]="12">
-            <mat-form-field>
-                <textarea matInput placeholder="Textarea"></textarea>
-            </mat-form-field>
+    <mat-grid-tile [colspan]="2" [rowspan]="13">
+        <mass-import (importer)="import($event)" class="mass-import" ></mass-import>
     </mat-grid-tile>
 </mat-grid-list>
