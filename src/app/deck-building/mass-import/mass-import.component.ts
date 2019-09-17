@@ -4,6 +4,9 @@ import { ScryfallService } from 'src/app/services/Scryfall/scryfall.service';
 import { Card } from '../models/Card';
 import { DeckEntry } from '../models/DeckEntry';
 import { stringify } from '@angular/compiler/src/util';
+import { MatDialog } from '@angular/material';
+import { LoadingSpinnerComponent } from 'src/app/shared/loading-spinner/loading-spinner.component';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'mass-import',
@@ -29,11 +32,11 @@ export class MassImportComponent implements OnInit {
   @Output("importer")
   public importer: EventEmitter<DeckEntry[]> = new EventEmitter();
 
-  constructor(private scryfall: ScryfallService) { }
+  constructor(private scryfall: ScryfallService, private matDialog: MatDialog) { }
 
   public import(): void{
 
-    
+    this.matDialog.open(LoadingSpinnerComponent, { disableClose: true })
 
     let cardList: {name:string; quantity: string}[];
     try{
@@ -46,6 +49,8 @@ export class MassImportComponent implements OnInit {
       cardList.map(
         item => item.name
       )
+    ).pipe(
+      tap( x => this.matDialog.closeAll())
     ).subscribe(
       finalCardList => this._emmitEvent(finalCardList, cardList)
     )
