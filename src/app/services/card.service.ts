@@ -21,6 +21,6 @@ export class CardService {
     if(!canBUnlimited)
       if(qty > 4)
         return 4
-    return qty
+    return quantity === undefined ? 1 : qty
   }
 }
