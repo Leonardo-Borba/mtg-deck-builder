@@ -1,4 +1,5 @@
 <form>
+  <h3>Search here</h3>
     <mat-form-field>
       <input matInput placeholder="Search" [matAutocomplete]="auto" [formControl]="search" (keyup)="submit($event)" >
       <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">

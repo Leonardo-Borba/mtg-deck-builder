@@ -1,20 +1,16 @@
 
 <mat-grid-list cols="4" rowHeight="50px">
-    <mat-grid-tile class="box-wrapper"  [colspan]="2" [rowspan]="1">
+    <mat-grid-tile class="box-wrapper"  [colspan]="2" [rowspan]="2">
         <div id="searchBox">
             <cardSearchBox (selected)="addCard($event)"></cardSearchBox>
         </div>
     </mat-grid-tile>
     <mat-grid-tile class="box-wrapper" [colspan]="2" [rowspan]="16">
         <div class="deck-wrapper">
-            <cdk-virtual-scroll-viewport  class="deckbox" itemSize="0">
-                <card cardToolTip [card]="item.card" class="card-wrapper" *cdkVirtualFor="let item of (deck.$entries | async);templateCacheSize: 0" [entry]="item"
-                    (onRemove)="removeEntry($event)">
-                    </card>
-            </cdk-virtual-scroll-viewport>
+            <decklist [entries]="deck.$entries" (remove)="removeEntry($event)"></decklist>
             <div>
                 <div id="control-panel">
-                    <button class="btn">save</button>
+                    <button mat-raised-button color="primary" >save</button>
                 </div>
             </div>
         </div>

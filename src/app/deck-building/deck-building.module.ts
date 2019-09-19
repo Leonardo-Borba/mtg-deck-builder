@@ -12,9 +12,10 @@ import { MaterialModuleModule } from '../shared/material-module/material-module.
 import { CardTooltipComponent } from './card-tooltip/card-tooltip.component';
 import { ManaCostComponent } from './card/mana-cost/mana-cost.component';
 import { MassImportComponent } from './mass-import/mass-import.component';
+import { DecklistComponent } from './decklist/decklist.component';
 
 @NgModule({
-  declarations: [SearchComponent, DeckBoxComponent, CardComponent, CardTooltipComponent, ManaCostComponent, MassImportComponent],
+  declarations: [SearchComponent, DeckBoxComponent, CardComponent, CardTooltipComponent, ManaCostComponent, MassImportComponent, DecklistComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

@@ -29,7 +29,10 @@ export class Deck {
     }
 
     private alertChanges(): void {
-        this.$entries.next([...this.entries.values()])
+        if(this.entries.size === 0)
+            this.$entries.next(undefined)
+        else
+            this.$entries.next([...this.entries.values()])
     }
 
     public replaceAllEntries(newEntries: DeckEntry[]){
