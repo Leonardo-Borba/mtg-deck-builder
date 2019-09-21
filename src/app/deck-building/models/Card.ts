@@ -1,4 +1,5 @@
 import { RawCard } from '../../services/Scryfall/Models/RawCard';
+import { Format } from './FormatEnum';
 
 export class Card {
 
@@ -9,6 +10,7 @@ export class Card {
     public smallImage: string;
     public normalImage:string;
     public cardType:string;
+    public legalities: Map<Format, boolean>;
 
     constructor(card: RawCard){
 
@@ -18,7 +20,9 @@ export class Card {
         this.normalImage = this._getImage(card, "normal");
         this.name = card.name;
         this.manaCost = this._convertManaCost(this._getManaCost(card));
+        this.legalities = this._generateLegalities(card);
         this.cardType = card.type_line
+        console.log(this)
     }
 
     private _convertManaCost(mana_cost: string): string[] {
@@ -44,4 +48,17 @@ export class Card {
         return card.layout.toLowerCase() === "transform"
     }
 
+    _generateLegalities(card: RawCard): Map<Format, boolean> {
+        let legalities = new Map(Object.entries(card.legalities))
+        let legals = [...legalities.keys()]
+        let converted = new Map<Format, boolean>();
+        legals.map(
+            entry => {
+                let fmt = Format[entry.toUpperCase()]
+                let isLegal = legalities.get(entry) === "legal" ? true : false;
+                converted.set(fmt, isLegal)
+            }
+        )
+        return converted;
+    }
 }

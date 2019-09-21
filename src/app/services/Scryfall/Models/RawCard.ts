@@ -5,4 +5,5 @@ export interface RawCard {
     layout: string;
     card_faces: RawCard[];
     type_line: string;
+    legalities: object;
 }

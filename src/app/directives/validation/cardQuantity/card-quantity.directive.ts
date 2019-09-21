@@ -1,6 +1,7 @@
-import { Directive, ElementRef, Input, OnInit, AfterViewChecked, AfterContentInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, AfterContentInit } from '@angular/core';
 import { DeckEntry } from 'src/app/deck-building/models/DeckEntry';
-import { CardService } from 'src/app/services/card.service';
+import { DeckService } from 'src/app/services/deck.service';
+import { FormatValidationService } from 'src/app/services/format-validation.service';
 
 @Directive({
   selector: '[cardQuantity]'
@@ -19,17 +20,17 @@ export class CardQuantityDirective implements OnInit, AfterContentInit {
 
   private native: any;
 
-  constructor(private element: ElementRef, private cardService: CardService) { }
+  constructor(private element: ElementRef, private deckService: DeckService, private validService: FormatValidationService) { }
 
   private _setMax(native: any) {
     
     if(!this._cardCanBeUnlimited())
     {
-      native.max = 4
+      native.max = this.validService.getMaxQtyForFormat()
     }
   }
   private _cardCanBeUnlimited(): boolean {
-    return this.cardService.canBeUnlimited(this.entry.card)
+    return this.validService.canBeUnlimited(this.entry.card)
   }
 
 }

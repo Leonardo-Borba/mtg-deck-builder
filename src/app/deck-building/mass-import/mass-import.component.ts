@@ -7,7 +7,8 @@ import { stringify } from '@angular/compiler/src/util';
 import { MatDialog } from '@angular/material';
 import { LoadingSpinnerComponent } from 'src/app/shared/loading-spinner/loading-spinner.component';
 import { tap } from 'rxjs/operators';
-import { CardService } from 'src/app/services/card.service';
+import { FormatValidationService } from 'src/app/services/format-validation.service';
+import { DeckService } from 'src/app/services/deck.service';
 
 @Component({
   selector: 'mass-import',
@@ -16,7 +17,7 @@ import { CardService } from 'src/app/services/card.service';
 })
 export class MassImportComponent implements OnInit {
 
-  public massImport:string = `1x Adarkar Valkyrie
+  public massImport: string = `1x Adarkar Valkyrie
 1x AEthermage's Touch
 1x Akroma's Vengeance
 1x Aminatou, the Fateshifter
@@ -33,42 +34,49 @@ export class MassImportComponent implements OnInit {
   @Output("importer")
   public importer: EventEmitter<DeckEntry[]> = new EventEmitter();
 
-  constructor(private scryfall: ScryfallService, private matDialog: MatDialog, private cardService: CardService) { }
+  constructor(
+    private scryfall: ScryfallService, 
+    private matDialog: MatDialog, 
+    private deckService: DeckService,
+    private formatService: FormatValidationService) { }
 
-  public import(): void{
+  public import(): void {
 
-    this.matDialog.open(LoadingSpinnerComponent, { disableClose: true })
-
-    let cardList: {name:string; quantity: string}[];
-    try{
-      cardList = this._parseMassImportList()
-    }
-    catch(error){
-      //TO-DO: write error handling
-    }
-    this.scryfall.getBulk(
-      cardList.map(
-        item => item.name
+    if (this.deckService.isFormatPresent()) {
+      this.matDialog.open(LoadingSpinnerComponent, { disableClose: true })
+      let cardList: { name: string; quantity: string }[];
+      try {
+        cardList = this._parseMassImportList()
+      }
+      catch (error) {
+        console.log(error instanceof DeckParsingError)
+      }
+      this.scryfall.getBulk(
+        cardList.map(
+          item => item.name
+        )
+      ).pipe(
+        tap(x => this.matDialog.closeAll())
+      ).subscribe(
+        finalCardList => this._emmitEvent(finalCardList, cardList)
       )
-    ).pipe(
-      tap( x => this.matDialog.closeAll())
-    ).subscribe(
-      finalCardList => this._emmitEvent(finalCardList, cardList)
-    )
-
+    }
+    else{
+      this.formatService.showNoFormatError();
+    }
   }
   _emmitEvent(finalCardList: Card[], cardList: { name: string; quantity: string; }[]): void {
 
     let entries: DeckEntry[] = [];
     let entriesMap: Map<string, string> = this._convertEntriesToMap(cardList);
     finalCardList.forEach(
-      cardItem => entries.push(new DeckEntry(cardItem, this.cardService.validateQuantity(entriesMap.get(cardItem.name), cardItem)))
+      cardItem => entries.push(new DeckEntry(cardItem, this.formatService.validateQuantity(entriesMap.get(cardItem.name), cardItem)))
     )
-      this.importer.emit(entries);
+    this.importer.emit(entries);
   }
 
   _convertEntriesToMap(cardList: { name: string; quantity: string; }[]): Map<string, string> {
-    let entriesMap= new Map<string, string>()
+    let entriesMap = new Map<string, string>()
 
     cardList.forEach(
       cardItem => entriesMap.set(cardItem.name, cardItem.quantity)
@@ -78,27 +86,21 @@ export class MassImportComponent implements OnInit {
   }
   _parseMassImportList() {
 
-    let cardList: {name:string; quantity: string}[] = [];
+    let cardList: { name: string; quantity: string }[] = [];
 
-    try {
-      this.massImport.trim().split("\n").forEach(
-        (item, index) => {
-          let qtd = item.match(/\d+x?/);
-          if(qtd != null){
-            let quantity = qtd[0].replace("x", "");
-            let cardName = item.replace(/\d+x?/, "").trim()
-            cardList.push({name: cardName, quantity: quantity})
-          }
-          else
-            throw new DeckParsingError(index, item)
+    this.massImport.trim().split("\n").forEach(
+      (item, index) => {
+        let qtd = item.match(/\d+x?/);
+        let cardName = item.replace(/\d+x?/, "").trim()
+        if (qtd != null || cardName != null) {
+          let quantity = qtd[0].replace("x", "");
+          cardList.push({ name: cardName, quantity: quantity })
         }
-      ) 
-    } catch (error) {
-      console.log(error)
-    }
-    finally{
-      return cardList;
-    }
+        else
+          throw new DeckParsingError(index, item)
+      }
+    )
+    return cardList;
   }
 
   ngOnInit() {

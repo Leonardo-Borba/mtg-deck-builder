@@ -1,8 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ScryfallService } from 'src/app/services/Scryfall/scryfall.service';
+
 import { Card } from 'src/app/deck-building/models/Card';
 import { DeckEntry } from "src/app/deck-building/models/DeckEntry";
-import { Deck } from '../models/Deck';
+import { Format } from '../models/FormatEnum';
+import { DeckService } from 'src/app/services/deck.service';
+import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { ModalDialogComponent } from 'src/app/shared/modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'deckBox',
@@ -10,31 +14,51 @@ import { Deck } from '../models/Deck';
   styleUrls: ['./deck-box.component.less']
 })
 export class DeckBoxComponent implements OnInit {
-  
-  deck: Deck = new Deck();
+
   ngOnInit(): void {
-  }
 
-  constructor(private scryService: ScryfallService) {}
-
-
-  addCard(card: string) :void{
-
-    this.scryService.validateCard(card).subscribe(
-      card => this.addEntry(card),
-      error => console.log(error)
+    this.format.valueChanges.subscribe(
+      format => this.changeFormat(format)
     )
   }
-  addEntry(card: Card): void {
-    this.deck.addEntry(card)
+  changeFormat(format: any): void {
+    if(this.deckService.isDeckEmpty())
+      this.deckService.updateFormat(format)
+    else{
+      this.diag.open(ModalDialogComponent,{data: {
+        title: `This will remove all entries from your deck`,
+        accept: "Ok",
+        reject: "Cancel"
+      }}).afterClosed().subscribe(
+        result => {
+          if(result){
+            this.deckService.removeAllEntries()
+            this.deckService.updateFormat(format)
+
+          }
+        }
+      )
+    }
+
+  }
+
+  private format = new FormControl()
+
+  constructor(public deckService: DeckService, private diag: MatDialog) {}
+
+  addCard(card: string) :void{
+    this.deckService.addCard(card);
   }
 
   removeEntry(event: DeckEntry){
-    this.deck.removeEntry(event)
+    this.deckService.removeEntry(event)
   }
 
   import(event: DeckEntry[]){
-    this.deck.replaceAllEntries(event)
+      this.deckService.replaceAllEntries(event)
   }
 
+  getAvailableFormats(){
+    return Object.keys(Format);
+  }
 }
