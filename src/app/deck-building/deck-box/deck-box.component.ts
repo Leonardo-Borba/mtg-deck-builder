@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { Card } from 'src/app/deck-building/models/Card';
 import { DeckEntry } from "src/app/deck-building/models/DeckEntry";
 import { Format } from '../models/FormatEnum';
 import { DeckService } from 'src/app/services/deck.service';
@@ -15,6 +14,8 @@ import { ModalDialogComponent } from 'src/app/shared/modal-dialog/modal-dialog.c
 })
 export class DeckBoxComponent implements OnInit {
 
+  showModal = true;
+
   ngOnInit(): void {
 
     this.format.valueChanges.subscribe(
@@ -24,7 +25,7 @@ export class DeckBoxComponent implements OnInit {
   changeFormat(format: any): void {
     if(this.deckService.isDeckEmpty())
       this.deckService.updateFormat(format)
-    else{
+    else if(this.showModal){
       this.diag.open(ModalDialogComponent,{data: {
         title: `This will remove all entries from your deck`,
         accept: "Ok",
@@ -34,7 +35,12 @@ export class DeckBoxComponent implements OnInit {
           if(result){
             this.deckService.removeAllEntries()
             this.deckService.updateFormat(format)
-
+            this.showModal = true;
+          }
+          else{
+            this.showModal = false;
+            this.format.setValue(this.deckService.getFormat())
+            this.showModal = true;
           }
         }
       )
@@ -42,7 +48,7 @@ export class DeckBoxComponent implements OnInit {
 
   }
 
-  private format = new FormControl()
+  format = new FormControl()
 
   constructor(public deckService: DeckService, private diag: MatDialog) {}
 
