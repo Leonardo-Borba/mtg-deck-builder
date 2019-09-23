@@ -50,6 +50,7 @@ export class DeckService {
   }
 
   private alertChanges(): void {
+    this._updateQuantity()
     if (this.deck.entries.size === 0)
       this.deck.$entries.next(undefined)
     else
@@ -66,7 +67,6 @@ export class DeckService {
       }
     )
     this.alertChanges()
-    this._updateQuantity()
   }
   removeAllEntries() {
     this.deck.entries.clear()
