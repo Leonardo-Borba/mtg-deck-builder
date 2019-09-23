@@ -15,11 +15,15 @@ import { ModalDialogComponent } from 'src/app/shared/modal-dialog/modal-dialog.c
 export class DeckBoxComponent implements OnInit {
 
   showModal = true;
-
+  itensSize = 2;
+  deckSize = 15;
   ngOnInit(): void {
-
+    this.onResize()
     this.format.valueChanges.subscribe(
       format => this.changeFormat(format)
+    )
+    this.deckService.entries().subscribe(
+      () => this.onResize()
     )
   }
   changeFormat(format: any): void {
@@ -66,5 +70,19 @@ export class DeckBoxComponent implements OnInit {
 
   getAvailableFormats(){
     return Object.keys(Format);
+  }
+
+  onResize(){
+    if(window.innerWidth < 760){
+      this.itensSize = 4;
+      if(this.deckService.isDeckEmpty())
+        this.deckSize = 4
+      else
+        this.deckSize = 15
+    }
+    else{
+      this.itensSize = 2
+      this.deckSize = 15
+    }
   }
 }

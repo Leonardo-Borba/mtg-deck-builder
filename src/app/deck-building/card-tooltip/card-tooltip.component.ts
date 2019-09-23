@@ -16,8 +16,8 @@ export class CardTooltipComponent implements OnInit {
 
   onShow(event: MouseEvent): void{
     const tooltip = this.element.nativeElement.childNodes[0];
-    tooltip.style.top = `${event.clientY}px`;
-    tooltip.style.left = `${event.clientX}px`;
+    tooltip.style.top = `${event.clientY+10}px`;
+    tooltip.style.left = `${event.clientX+10}px`;
   }
 
 }

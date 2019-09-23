@@ -1,23 +1,23 @@
-<mat-grid-list cols="4" rowHeight="50px">
+<mat-grid-list cols="4" rowHeight="50px" (window:resize)="onResize()">
     <mat-grid-tile [colspan]="2" [rowspan]="2">
         <!-- <mat-form-field>
             <input matInput placeholder="Name" type="text" [(ngModel)]="deck.name">
         </mat-form-field> -->
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="2" [rowspan]="2">
-        <mat-form-field>
+    <mat-grid-tile [colspan]="itensSize" [rowspan]="2">
+        <mat-form-field >
             <mat-label>Format</mat-label>
             <mat-select [formControl]="format">
                 <mat-option *ngFor="let format of getAvailableFormats()" [value]="format.toLowerCase()">{{format}}</mat-option>
             </mat-select>
         </mat-form-field>
     </mat-grid-tile>
-    <mat-grid-tile class="box-wrapper" [colspan]="2" [rowspan]="2">
+    <mat-grid-tile class="box-wrapper" [colspan]="itensSize" [rowspan]="2">
         <div id="searchBox">
             <cardSearchBox (selected)="addCard($event)"></cardSearchBox>
         </div>
     </mat-grid-tile>
-    <mat-grid-tile class="box-wrapper" [colspan]="2" [rowspan]="15">
+    <mat-grid-tile class="box-wrapper" [colspan]="itensSize" [rowspan]="deckSize">
         <div class="deck-wrapper">
             <decklist [entries]="deckService.entries()" (remove)="removeEntry($event)"></decklist>
             <div>
@@ -30,7 +30,7 @@
             </div>
         </div>
     </mat-grid-tile>
-    <mat-grid-tile [colspan]="2" [rowspan]="13">
+    <mat-grid-tile [colspan]="itensSize" [rowspan]="13">
         <mass-import (importer)="import($event)" class="mass-import"></mass-import>
     </mat-grid-tile>
 </mat-grid-list>
